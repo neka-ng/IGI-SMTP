@@ -1,0 +1,6 @@
+{
+  "name": "IGI SMTP",
+  "description": "High-performance SMTP delivery dashboard, subscriber list manager, and email campaign editor.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

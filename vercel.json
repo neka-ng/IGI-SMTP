@@ -1,0 +1,30 @@
+{
+  "version": 2,
+  "comment": "Vercel deployment for IGI SMTP - Vite + Express fullstack app with PostgreSQL (Neon)",
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "builds": [
+    {
+      "src": "dist/server.cjs",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "dist/**",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/assets/(.*)",
+      "dest": "/dist/assets/$1"
+    },
+    {
+      "src": "/api/(.*)",
+      "dest": "dist/server.cjs"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "dist/server.cjs"
+    }
+  ]
+}

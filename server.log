@@ -1,0 +1,14 @@
+
+> react-example@0.0.0 dev
+> tsx server.ts
+
+🌐 DNS resolvers configured: 8.8.8.8, 8.8.4.4, 1.1.1.1, 1.0.0.1 (public)
+🌐 [server.ts] DNS resolvers set to public servers: [ '8.8.8.8', '8.8.4.4', '1.1.1.1', '1.0.0.1' ]
+◇ injected env (8) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+🔄 Connection attempt 1/3 to MongoDB Atlas...
+✅ Connected to MongoDB cloud instance successfully.
+   Cluster: ac-kjoshmj-shard-00-02.demytkv.mongodb.net
+   Database: test
+🌱 Seeding default admin user into database...
+   Default login: admin@igi-smtp.io / admin123
+🚀 Secure IGI-SMTP server running on http://localhost:3000
