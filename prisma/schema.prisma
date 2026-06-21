@@ -1,0 +1,149 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Subscriber {
+  id         String   @id @default(cuid())
+  name       String
+  email      String   @unique
+  status     String   @default("Active")
+  dateAdded  String?
+  avatarUrl  String?
+  initials   String?
+  plan       String   @default("Free")
+  roster     String   @default("General")
+  rosterName String   @default("General")
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([email])
+  @@index([roster])
+  @@index([rosterName])
+  @@index([status])
+}
+
+model Campaign {
+  id            String   @id @default(cuid())
+  name          String
+  status        String   @default("DRAFT")
+  recipients    Int      @default(0)
+  openRate      Float?
+  createdDate   String?
+  subjectLine   String?
+  senderName    String?
+  replyTo       String?
+  templateId    String?
+  emailElements String   @default("[]")
+  targetLists   String   @default("[]")
+  scheduledAt   String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([status])
+}
+
+model CampaignEvent {
+  id         String   @id @default(cuid())
+  campaignId String
+  email      String
+  name       String
+  eventType  String
+  timestamp  DateTime @default(now())
+  url        String?
+  userAgent  String?
+  ipAddress  String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([campaignId])
+  @@index([email])
+  @@index([eventType])
+  @@index([timestamp])
+}
+
+model EmailTemplate {
+  id            String   @id @default(cuid())
+  name          String
+  description   String
+  thumbnailAlt  String?
+  thumbnailUrl  String?
+  elements      String   @default("[]")
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model CustomFont {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  family    String
+  url       String?
+  format    String   @default("woff2")
+  weight    String   @default("400")
+  style     String   @default("normal")
+  category  String   @default("sans-serif")
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([name])
+  @@index([category])
+  @@index([isActive])
+}
+
+model User {
+  id                String   @id @default(cuid())
+  email             String   @unique
+  password          String
+  name              String   @default("Admin")
+  avatarUrl         String?
+  role              String   @default("user")
+  mustChangePassword Boolean @default(false)
+  allowedModules    String   @default("[]")
+  createdById       String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  apiKeys           ApiKey[]
+
+  @@index([email])
+}
+
+model ApiKey {
+  id          String    @id @default(cuid())
+  keyPrefix   String    // First 8 chars for display (e.g., "igi_live_a1b2c3d4" -> "a1b2c3d4")
+  keyHash     String    @unique // bcrypt hash of the full API key
+  name        String    // Human-readable label e.g. "Production CRM"
+  description String?
+  userId      String    // FK to User — tracks who created it
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lastUsedAt  DateTime?
+  expiresAt   DateTime?
+  isActive    Boolean   @default(true)
+  usageCount  Int       @default(0) // Total emails sent via this key
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([keyHash])
+  @@index([userId])
+}
+
+model EmailFooter {
+  id            String   @id @default(cuid())
+  name          String
+  description   String?
+  thumbnailUrl  String?
+  background    String   @default("{}") // JSON: BackgroundStyle
+  layout        String   @default("{}") // JSON: FooterLayout
+  zones         String   @default("[]") // JSON: FooterZone[]
+  isActive      Boolean  @default(true)
+  createdById   String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([createdById])
+  @@index([isActive])
+}
